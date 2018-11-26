@@ -53,13 +53,13 @@ function gifFrames (options, callback) {
   var outputType = options.outputType || 'jpg';
   var quality = options.quality;
   var cumulative = options.cumulative;
-
+  var outputFile = options.outputFile;
   var acceptedFrames = frames === 'all' ? 'all' : new MultiRange(frames);
 
   // Necessary to check if we're in Node or the browser until this is fixed:
   // https://github.com/scijs/get-pixels/issues/33
   var inputType = typeof window === 'undefined' ? 'image/gif' : '.GIF';
-  getPixels(url, inputType, function (err, pixels, framesInfo) {
+  getPixels(url, inputType, outputFile, function (err, pixels, framesInfo) {
     if (err) {
       reject(err);
       return;
@@ -111,7 +111,7 @@ function gifFrames (options, callback) {
         });
       })(i);
     }
-    resolve(frameData);
+    resolve(frameData, outputFile);
   });
 
   return promise;
